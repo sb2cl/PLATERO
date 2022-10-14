@@ -1,4 +1,4 @@
-function [s_RandR, varproc] = randr(measurements,replicates,pieces,operary,repeat,allinone)
+function [s_RandR, varproc_rel, ff] = randr(measurements,replicates,pieces,operary,repeat,allinone,figobj)
 % Copyright (C) 2020 A. Gonzalez Cebrian, J. Borràs Ferris
 %
 % This program is free software: you can redistribute it and/or modify
@@ -49,6 +49,9 @@ function [s_RandR, varproc] = randr(measurements,replicates,pieces,operary,repea
 %   - VarCont.Gage: pctge of variability apported by Gage.
 if nargin == 5
     allinone = 0;
+    figobj = [];
+elseif nargin == 6
+    figobj = [];
 end
 % Measurements: CPred
 % Replicates: Well
@@ -69,7 +72,7 @@ c = categorical(["Measurement System", "Repeat", "Reprod (Gain)",...
     "Part-to-Part"]);
 c = reordercats(c,string(c));
 ybar = [];
-varproc = nan(length(upieces),2);
+varproc_rel = nan(length(upieces),2);
 for i = 1:length(upieces)
     disp(strcat("R & R Analysis on measurements for C = ", string(upieces(i))))
     [~, table, ~] = anovan(measurements(vecpieces == upieces(i)),...
@@ -103,12 +106,13 @@ for i = 1:length(upieces)
         s_RandR.(strcat("C", string(i))).VarCont.s2Repeat,...
         s_RandR.(strcat("C", string(i))).VarCont.s2Gain,...
         s_RandR.(strcat("C", string(i))).VarCont.s2Replicate]];
-    varproc(i,:) = [upieces(i), 6*(sqrt(s2Gain + s2Repeat + s2nReplicate))];
+    varproc_rel(i,:) = [upieces(i), 6*(sqrt(s2Gain + s2Repeat + s2nReplicate))];
 end
-colscale = gray(length(upieces)+1);
+colscale = gray(3);
 if allinone == 0
     d1 = ceil(sqrt(length(upieces)));
     d2 = ceil(length(upieces)/ceil(sqrt(length(upieces))));
+    ff = rrbarplot(ybar, colscale);
     for i = 1:length(upieces)
         subplot(d2,d1,i)
         bar(c, ybar(i,:),'FaceColor',colscale(i,:)),
@@ -119,6 +123,7 @@ if allinone == 0
         title(strcat("C = ", string(upieces(i)), " uM"))
     end
 else
+    ff = rrbarplot(ybar, upieces, colscale, figobj);
     b = bar(c,ybar','FaceColor','flat');
     for k = 1:size(ybar,1)
         b(k).CData = colscale(k,:);

@@ -107,7 +107,7 @@ end
 xlabel("Concentration^{-1}");
 ylabel("Bias·Concentration^{-1}");
 % xlim([0.8*min(x), 1.1*max(x)])
-title('Bias/Concentration vs. 1/Concentration')
+title('Bias·Concentration^{-1} vs. Concentration^{-1}')
 
 grid on
 
@@ -129,7 +129,7 @@ if length(unique_value)<10
 end
 xlabel("Concentration^{-1}");
 ylabel("Bias·Concentration^{-1}");
-title('Bias/Concentration vs. 1/Concentration')
+title('Bias·Concentration^{-1} vs. Concentration^{-1}')
 grid on
 % Proability Plot
 subplot(122)

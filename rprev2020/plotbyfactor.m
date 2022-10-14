@@ -78,6 +78,7 @@ switch nargin
     otherwise
         error('Unexpected inputs')
 end
+ug = unique(g);
 symbs = {'o' '+' 'd' '^' 'p'  '*' 'v' '<' '>'};
 symbs = symbs(1:length(ug));
 colscale = linspecer(length(symbs),'sequential');

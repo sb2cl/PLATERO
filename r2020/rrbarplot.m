@@ -17,7 +17,7 @@ else
 end
 xb = unique(xb);
 if isempty(ff)
-    ff = figure('Position',[405 342 643 420]);
+    ff = figure('Position',[405 342  872 338]);
 else
     ff = gcf;
 end
@@ -25,9 +25,9 @@ bar(xb,ybar(:,2:3),'stacked'), grid on
 ff.Children.Position(4) = 0.6;
 ff.Children.Position(2) = 0.3;
 hold on
-bar(xb + 1, ybar(:,4))
-ylim([0,120])
-xticks([xb,xb+1]),xticklabels(strcat(string(repmat(round(upieces,4),2,1)), " uM")),
+bar(xb + 2, ybar(:,4))
+ylim([0,130])
+xticks([xb,xb+2]),xticklabels(strcat(string(repmat(round(upieces,4),2,1)), " \muM")),
 xtickangle(45)
 gca.XAxis.Fontsize = 6;
 annotation('textbox', [0.2,0.05,0.27,0.1], 'String', ...
@@ -41,6 +41,6 @@ ff.Children(2).Children(1).FaceColor = colscale(1,:);
 ff.Children(2).Children(2).FaceColor = colscale(2,:);
 ff.Children(2).Children(3).FaceColor = colscale(3,:);
 
-text([xb,xb+1] - bw/2.5, 5+[ybar(:,1);ybar(:,4)],  ...
+text([xb,xb+2] - bw/2.5, 5+[ybar(:,1);ybar(:,4)],  ...
     strcat(string(round([ybar(:,1);ybar(:,4)], 2)), "%"),'FontSize',9)
 end

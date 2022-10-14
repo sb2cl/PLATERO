@@ -1,4 +1,5 @@
-function datPRnew = readexperiment(filename,datarange,glevels,readvarnames,varnames)
+function [datPRnew, ind_GFP] = readexperiment(filename,datarange,glevels,...
+    readvarnames,varnames,nanvalue)
 % Copyright (C) 2020 A. Gonzalez Cebrian, J. Borràs Ferris
 %
 % This program is free software: you can redistribute it and/or modify
@@ -30,15 +31,20 @@ function datPRnew = readexperiment(filename,datarange,glevels,readvarnames,varna
 % OUTPUTS
 %
 % datPRnew: re-arranged table with plate reader measurements.
+% ind_GFP: indices of rows with GFP 
 switch nargin
     case 3
         readvarnames = false;
         varnames = cellstr(['WellID','Well',...
        'Concentration',strcat('G',string(glevels)),'OD']);
+        nanvalue = nan;
     case 4
         varnames = cellstr(['WellID','Well',...
        'Concentration',strcat('G',string(glevels)),'OD']);
+        nanvalue = nan;
     case 5
+        nanvalue = nan;
+    case 6
     otherwise
         error("More inputs than expected (max. 5) ")
 end
@@ -59,4 +65,11 @@ well_conc_od_rep = [find(cellfun(@(x) ismember("Well",x),dataPR.Properties.Varia
     find(cellfun(@(x) ismember("OD",x),dataPR.Properties.VariableNames)),...
     find(cellfun(@(x) ismember("Repeat",x),dataPR.Properties.VariableNames))];
 datPRnew = tableprep(dataPR, gainloc, well_conc_od_rep, glevels);
+
+if isnan(nanvalue)
+    ind_GFP = ~isnan(datPRnew.Concentration);
+else
+    ind_GFP = (datPRnew.Concentration ~= nanvalue);
+end
+
 end

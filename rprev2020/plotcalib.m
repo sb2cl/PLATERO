@@ -63,7 +63,7 @@ hold on
 plot(lineval_xrng,lineval_yrng,'r--',...
     'linewidth',1.2)
 xlabstr = "F_{reporter} (A.U.)";
-ylabstr = "Concentration (uM)";
+ylabstr = "Concentration (\muM)";
 if strcmp(scalex,"log")
     xlabstr = strcat(xlabstr,"-log scale");
 end

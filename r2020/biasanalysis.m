@@ -57,11 +57,13 @@ if biasnorm==0
     x = xobs;
     y = Bias;
     ylab = "Bias";
+    xlab = strcat(xlab, " (\muM)");
 elseif biasnorm==1
     x = 1./(xobs);
     y = Bias./(xobs);
-    xlab2 = strsplit(xlab,'/');
-    ylab = strcat("Bias/",xlab2{2});
+    xlab2 = xlab;
+    xlab = strcat(xlab, " (\muM^{-1})");
+    ylab = strcat("Bias·",xlab2);
 end
 mdl = LinearModel.fit(x,y);
 unique_value = unique(x);

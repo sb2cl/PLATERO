@@ -1,4 +1,5 @@
-function datPRnew = readexperiment(filename,datarange,glevels,readvarnames,varnames)
+function [datPRnew, ind_GFP] = readexperiment(filename,datarange,glevels,...
+    readvarnames,varnames,nanvalue)
 % Copyright (C) 2020 A. Gonzalez Cebrian, J. Borràs Ferris
 %
 % This program is free software: you can redistribute it and/or modify
@@ -38,6 +39,7 @@ arguments
    readvarnames logical = false
    varnames {cell,string,char} = cellstr(['WellID','Well',...
        'Concentration',strcat('G',string(glevels)),'OD'])
+   nanvalue {double,char,string}= nan;
 end 
 [~,sheet_name] = xlsfinfo(filename);
 ct = cellfun(@(x) cell2table(table2cell(readtable(filename,'Sheet',x,...
@@ -55,4 +57,10 @@ well_conc_od_rep = [find(cellfun(@(x) ismember("Well",x),dataPR.Properties.Varia
     find(cellfun(@(x) ismember("OD",x),dataPR.Properties.VariableNames)),...
     find(cellfun(@(x) ismember("Repeat",x),dataPR.Properties.VariableNames))];
 datPRnew = tableprep(dataPR, gainloc, well_conc_od_rep, glevels);
+
+if isnan(nanvalue)
+    ind_GFP = ~isnan(datPRnew.Concentration);
+else
+    ind_GFP = (datPRnew.Concentration ~= nanvalue);
+end
 end

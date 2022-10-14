@@ -58,7 +58,7 @@ for uc = 1:length(uconc)
         if uw == length(uwell)
             fill([ind_uw(1):ind_uw(end), fliplr(ind_uw(1):ind_uw(end))], ...
                 [LowCIs', fliplr(UpCIs')], cicol,'FaceAlpha',0.5,...
-                'DisplayName',"C.I._9_5_% C_p_r_e_d",'EdgeColor','none');
+                'DisplayName','$$C.I._{95\%} \hat{C}$$','EdgeColor','none');
         else
             fill([ind_uw(1):ind_uw(end), fliplr(ind_uw(1):ind_uw(end))], ...
                 [LowCIs', fliplr(UpCIs')], cicol,'FaceAlpha',0.5,...
@@ -77,5 +77,7 @@ for uc = 1:length(uconc)
     title(strcat("Concentration = ", string(uconc(uc))))
      xlabel('Observations');ylabel('Concentration');
 end
-legend('Location','bestoutside','Orientation','Vertical');
+lg  = legend('Orientation','Horizontal','NumColumns',2); 
+lg.Layout.Tile = 'South'; 
+lg.Interpreter = "latex";
 end

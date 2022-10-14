@@ -89,72 +89,73 @@ Gcoeffs(isnan(table2array(Gcoeffs(:,2))),:) = [];
 [~,idc2] = normalout(Gcoeffs.coef2,alpha);
 
 %%%%%%%%%%% Plot coefficient values %%%%%%%%%%%%%%%
-figure,
-if strcmp(plottype,'points')
-    subplot(2,3,1),
-    histogram(Gcoeffs.coef1,'b'),grid on,xlabel('b_1'),ylabel('freq.'),
-    title('Hisogram b_1')
-    subplot(2,3,[2,3])
-    scatter(find(idc1==0),Gcoeffs.coef1(~idc1),'Marker','o',...
-        'MarkerFaceColor','k', 'MarkerFaceAlpha',0.7,...
-        'MarkerEdgeColor','none','HandleVisibility','off');
-    grid on,hold on,
-    scatter(find(idc1),Gcoeffs.coef1(idc1),'Marker','^',...
-        'MarkerFaceColor','r', 'MarkerFaceAlpha',0.7,...
-        'MarkerEdgeColor','none');
-    legend('Outliers'), legend('boxoff'),
-    legend('Location','northwest','FontSize',9),
-    xlabel('Index'), title('Values b_1')
-    
-    
-    subplot(2,3,4),
-    histogram(Gcoeffs.coef2,'b'),grid on,xlabel('b_2'),ylabel('freq.'),
-    title('Hisogram b_2')
-    subplot(2,3,[5,6])
-    scatter(find(idc2==0),Gcoeffs.coef2(~idc2),'Marker','o',...
-        'MarkerFaceColor','k', 'MarkerFaceAlpha',0.7,...
-        'MarkerEdgeColor','none','HandleVisibility','off');
-    grid on,hold on,
-    scatter(find(idc2),Gcoeffs.coef2(idc2),'Marker','^',...
-        'MarkerFaceColor','r', 'MarkerFaceAlpha',0.7,...
-        'MarkerEdgeColor','none');
-    legend('Outliers'), legend('boxoff'),
-    legend('Location','northwest','FontSize',9),
-    title('Values b_2')
-elseif strcmp(plottype,'boxplot')
-    subplot(221)
-    histogram(Gcoeffs.coef1,'FaceColor','b'),grid on,xlabel('b_1'),ylabel('freq.'),
-    title('Hisogram b_1')
-    subplot(222)
-    boxplot(Gcoeffs.coef1(~idc1));
-    grid on,hold on,
-    scatter(unifrnd(0.95,1.05,sum(idc2),1), Gcoeffs.coef1(idc1),...
-        'Marker','^','MarkerFaceColor','r', 'MarkerFaceAlpha',0.5,...
-        'MarkerEdgeColor','none');
-    ylim([min(Gcoeffs.coef1)-0.1*abs(range(Gcoeffs.coef1)), ...
-        max(Gcoeffs.coef1)+0.1*abs(range(Gcoeffs.coef1))])
-    legend('Outliers'), %legend('boxoff'),
-    %     legend('Position',[0.65 0.5 0.2 0.05],'FontSize',9)
-    legend('Location','northeast','FontSize',9)
-    title('Boxplot b_1')
-    
-    subplot(223),
-    histogram(Gcoeffs.coef2,'FaceColor','b'),grid on,xlabel('b_2'),ylabel('freq.'),
-    title('Hisogram b_2')
-    subplot(224),
-    boxplot(Gcoeffs.coef2(~idc2));
-    grid on,hold on,
-    scatter(unifrnd(0.95,1.05,sum(idc2),1), Gcoeffs.coef2(idc2),...
-        'Marker','^','MarkerFaceColor','r', 'MarkerFaceAlpha',0.5,...
-        'MarkerEdgeColor','none');
-    ylim([min(Gcoeffs.coef2)-0.1*abs(range(Gcoeffs.coef2)), ...
-        max(Gcoeffs.coef2)+0.1*abs(range(Gcoeffs.coef2))])
-    legend('Outliers'), %legend('boxoff'),
-    %     legend('Position',[0.65 0.01 0.2 0.05],'FontSize',9),
-    legend('Location','northeast','FontSize',9)
-    title('Boxplot b_2')
-end
+if ~isempty(plottype)
+    figure,
+    if strcmp(plottype,'points')
+        subplot(2,3,1),
+        histogram(Gcoeffs.coef1,'b'),grid on,xlabel('b_1'),ylabel('freq.'),
+        title('Hisogram b_1')
+        subplot(2,3,[2,3])
+        scatter(find(idc1==0),Gcoeffs.coef1(~idc1),'Marker','o',...
+            'MarkerFaceColor','k', 'MarkerFaceAlpha',0.7,...
+            'MarkerEdgeColor','none','HandleVisibility','off');
+        grid on,hold on,
+        scatter(find(idc1),Gcoeffs.coef1(idc1),'Marker','^',...
+            'MarkerFaceColor','r', 'MarkerFaceAlpha',0.7,...
+            'MarkerEdgeColor','none');
+        legend('Outliers'), legend('boxoff'),
+        legend('Location','northwest','FontSize',9),
+        xlabel('Index'), title('Values b_1')
 
+
+        subplot(2,3,4),
+        histogram(Gcoeffs.coef2,'b'),grid on,xlabel('b_2'),ylabel('freq.'),
+        title('Hisogram b_2')
+        subplot(2,3,[5,6])
+        scatter(find(idc2==0),Gcoeffs.coef2(~idc2),'Marker','o',...
+            'MarkerFaceColor','k', 'MarkerFaceAlpha',0.7,...
+            'MarkerEdgeColor','none','HandleVisibility','off');
+        grid on,hold on,
+        scatter(find(idc2),Gcoeffs.coef2(idc2),'Marker','^',...
+            'MarkerFaceColor','r', 'MarkerFaceAlpha',0.7,...
+            'MarkerEdgeColor','none');
+        legend('Outliers'), legend('boxoff'),
+        legend('Location','northwest','FontSize',9),
+        title('Values b_2')
+    elseif strcmp(plottype,'boxplot')
+        subplot(221)
+        histogram(Gcoeffs.coef1,'FaceColor','b'),grid on,xlabel('b_1'),ylabel('freq.'),
+        title('Hisogram b_1')
+        subplot(222)
+        boxplot(Gcoeffs.coef1(~idc1));
+        grid on,hold on,
+        scatter(unifrnd(0.95,1.05,sum(idc2),1), Gcoeffs.coef1(idc1),...
+            'Marker','^','MarkerFaceColor','r', 'MarkerFaceAlpha',0.5,...
+            'MarkerEdgeColor','none');
+        ylim([min(Gcoeffs.coef1)-0.1*abs(range(Gcoeffs.coef1)), ...
+            max(Gcoeffs.coef1)+0.1*abs(range(Gcoeffs.coef1))])
+        legend('Outliers'), %legend('boxoff'),
+        %     legend('Position',[0.65 0.5 0.2 0.05],'FontSize',9)
+        legend('Location','northeast','FontSize',9)
+        title('Boxplot b_1')
+
+        subplot(223),
+        histogram(Gcoeffs.coef2,'FaceColor','b'),grid on,xlabel('b_2'),ylabel('freq.'),
+        title('Hisogram b_2')
+        subplot(224),
+        boxplot(Gcoeffs.coef2(~idc2));
+        grid on,hold on,
+        scatter(unifrnd(0.95,1.05,sum(idc2),1), Gcoeffs.coef2(idc2),...
+            'Marker','^','MarkerFaceColor','r', 'MarkerFaceAlpha',0.5,...
+            'MarkerEdgeColor','none');
+        ylim([min(Gcoeffs.coef2)-0.1*abs(range(Gcoeffs.coef2)), ...
+            max(Gcoeffs.coef2)+0.1*abs(range(Gcoeffs.coef2))])
+        legend('Outliers'), %legend('boxoff'),
+        %     legend('Position',[0.65 0.01 0.2 0.05],'FontSize',9),
+        legend('Location','northeast','FontSize',9)
+        title('Boxplot b_2')
+    end
+end
 %%%%%%%%%%% Table for ANOVA on the coefficients %%%%%%%%%%%
 [sample_spl1,sample_spl2] = split(Gcoeffs.Name,"_");
 Gcoeffs.Sample = sample_spl1(:,1);

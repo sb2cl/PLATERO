@@ -53,7 +53,7 @@ for uc = 1:length(uconc)
     uwell = unique(flu_conc.Well);
     formattedText = cell(length(uwell),1);
     xaxwell = nan(length(uwell),1);
-    plot(flu_conc.Concentration,'k--','Linewidth',0.8,'DisplayName',"C_o_b_s"),
+    plot(flu_conc.Concentration,'k--','Linewidth',0.8,'DisplayName','$$C_T$$'),
     hold on; grid on;
     for uw = 1:length(uwell)
         ind_uw = find(ismember(flu_conc.Well, uwell(uw)));
@@ -62,7 +62,7 @@ for uc = 1:length(uconc)
         if uw == length(uwell)
             fill([ind_uw(1):ind_uw(end), fliplr(ind_uw(1):ind_uw(end))], ...
                 [LowCIs', fliplr(UpCIs')], cicol,'FaceAlpha',0.5,...
-                'DisplayName',"C.I._9_5_% C_p_r_e_d",'EdgeColor','none');
+                'DisplayName','$$C.I._{95\%} \hat{C}$$','EdgeColor','none');
         else
             fill([ind_uw(1):ind_uw(end), fliplr(ind_uw(1):ind_uw(end))], ...
                 [LowCIs', fliplr(UpCIs')], cicol,'FaceAlpha',0.5,...
@@ -76,10 +76,12 @@ for uc = 1:length(uconc)
     yax = ylim;
     x1coord = 1:length(ind_uw):size(flu_conc,1)';
     xticks(x1coord);
-    text(xaxwell,1.04*yax(2)*ones(size(xaxwell)),formattedText)
+    text(xaxwell,1.04*yax(2)*ones(size(xaxwell)),formattedText,'FontSize',10)
     ylim([yax(1),1.1*yax(2)])
-    title(strcat("Concentration = ", string(uconc(uc))))
-     xlabel('Observations');ylabel('Concentration');
+    title(strcat("Concentration = ", string(uconc(uc)), " \muM"))
+    xlabel('Observations');ylabel('Conc.(\muM)');
 end
-legend('Location','bestoutside','Orientation','Vertical');
+lg  = legend('Orientation','Horizontal','NumColumns',2); 
+lg.Layout.Tile = 'South'; 
+lg.Interpreter = "latex";
 end

@@ -1,4 +1,4 @@
-function [s_RandR, varproc, ff] = randr(measurements,replicates,pieces,operary,repeat,allinone,figobj)
+function [s_RandR, varproc_rel, ff] = randr(measurements,replicates,pieces,operary,repeat,allinone,figobj)
 % Copyright (C) 2020 A. Gonzalez Cebrian, J. Borràs Ferris
 %
 % This program is free software: you can redistribute it and/or modify
@@ -75,7 +75,8 @@ c = categorical(["Measurement System", "Repeat", "Reprod (Gain)",...
     "Part-to-Part"]);
 c = reordercats(c,string(c));
 ybar = [];
-varproc = nan(length(upieces),2);
+varproc_rel = nan(length(upieces),2);
+varproc_abs = nan(length(upieces),2);
 for i = 1:length(upieces)
     disp(strcat("R & R Analysis on measurements for C = ", string(upieces(i))))
     [~, table, ~] = anovan(measurements(vecpieces == upieces(i)),...
@@ -90,8 +91,8 @@ for i = 1:length(upieces)
     nReplicate = length(unique(vecreplicates(vecpieces == upieces(i))));
     nRepeat = length(unique(vecrepeat(vecpieces == upieces(i))));
     
-    s2Gain = (MeanG - MeanE)/(nReplicate * nRepeat);
-    s2nReplicate = (MeanR - MeanE)/(nOperary * nRepeat);
+    s2Gain = abs(MeanG - MeanE)/(nReplicate * nRepeat);
+    s2nReplicate = abs(MeanR - MeanE)/(nOperary * nRepeat);
     s2Repeat = MeanE;
     s_RandR.(strcat("C", string(i))).s2Gain = s2Gain;
     s_RandR.(strcat("C", string(i))).s2nReplicate = s2nReplicate;
@@ -109,7 +110,7 @@ for i = 1:length(upieces)
         s_RandR.(strcat("C", string(i))).VarCont.s2Repeat,...
         s_RandR.(strcat("C", string(i))).VarCont.s2Gain,...
         s_RandR.(strcat("C", string(i))).VarCont.s2Replicate]];
-    varproc(i,:) = [upieces(i), 6*(sqrt(s2Gain + s2Repeat + s2nReplicate))];
+    varproc_rel(i,:) = [upieces(i), 6*(sqrt(s2Gain + s2Repeat + s2nReplicate))];
 end
 colscale = gray(3);
 if allinone == 0
@@ -123,7 +124,7 @@ if allinone == 0
         ylabel('Percent.(%)');
         ylim([0, 100]);
         grid on
-        title(strcat("C = ", string(upieces(i)), " uM"))
+        title(strcat("C = ", string(upieces(i)), " \muM"))
     end
 else
     ff = rrbarplot(ybar, upieces, colscale, figobj);

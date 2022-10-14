@@ -56,16 +56,19 @@ switch nargin
     otherwise
         error('Missing or unexpected inputs')
 end
+
 Bias = xpred - xobs;
 if biasnorm==0
     x = xobs;
     y = Bias;
     ylab = "Bias";
+    xlab = strcat(xlab, " (\muM)");
 elseif biasnorm==1
     x = 1./(xobs);
     y = Bias./(xobs);
-    xlab2 = strsplit(xlab,'/');
-    ylab = strcat("Bias/",xlab2{2});
+    xlab2 = xlab;
+    xlab = strcat(xlab, " (\muM^{-1})");
+    ylab = strcat("Bias·",xlab2);
 end
 mdl = LinearModel.fit(x,y);
 unique_value = unique(x);
@@ -74,7 +77,7 @@ yline(0,'LineStyle',':','Color','Black','LineWidth',0.8);
 scatter(x,y,20,'Marker','o','MarkerFaceColor','k',...
     'MarkerFaceAlpha',0.3,'MarkerEdgeColor','none');
 for i = 1:length(unique_value)
-    scatter(unique_value(i),mean(Bias(x == unique_value(i))),50,....
+    scatter(unique_value(i),mean(y(x == unique_value(i))),100,....
         'Marker','sq','MarkerFaceColor','red','MarkerEdgeColor','red');
 end
 if length(unique_value)<10
@@ -119,5 +122,6 @@ elseif basemodel==1 % Parameters referenced to the basic linear model (without s
     end
     meanbias = mean(contbias);
 end
+
 end
 
