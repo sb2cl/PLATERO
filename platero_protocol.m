@@ -21,6 +21,8 @@ colnames = {'WellID','Well','Concentration','G50','G60','G70','G80','OD'};
 
 [data_cal, datagfp_val] = prep_data(filename,colstable,gainlevels, ...
     colnames);
+save('calibration_PR1.mat',"data_cal")
+save('validation_PR1.mat',"datagfp_val")
 %% Step 1: Model fitting
 % load(strcat(pwd,'calibration.mat'))
 [blk_data, flu_data] = explore_data(data_cal);
@@ -29,7 +31,7 @@ colnames = {'WellID','Well','Concentration','G50','G60','G70','G80','OD'};
 % - all model coefficients;
 % - metrics evaluating the prediction of the concentration for the
 % calibration set
-[flu_data, model_parameters, calmetrics] = fit_platero_model(blk_data, flu_data);
+[flu_data, modelPR1, calmetricsPR1] = fit_platero_model(blk_data, flu_data);
 
 %% Step 3: Model Validation
 % load(strcat(dirdatasave,'validation.mat'))
@@ -43,14 +45,15 @@ colnames = {'WellID','Well','Concentration','G50','G60','G70','G80','OD'};
 %
 % %%%  F_obs | Gain | F_BLK(G level 1) | ... | F_BLK(G level g)
 %
-flu_data_val = datagfp_val(datagfp_val.Concentration<0.3,:);
+uG = unique(flu_data.Gain);
+uC = unique(flu_data.Concentration);
+flu_data_val = datagfp_val(ismember(datagfp_val.Gain, uG),:);
 G = unique(flu_data_val.Gain);
 % Assign the correspoding F_BLK values to each observation F_obs
-flu_data_val.Fblk = repmat(model_parameters{:,["F_BLK (G = 50)", "F_BLK (G = 60)",...
-   "F_BLK (G = 70)", "F_BLK (G = 80)"]}', size(flu_data_val,1)/length(G),1);
+flu_data_val.Fblk = repmat(modelPR1{:,1:4}', size(flu_data_val,1)/length(G),1);
 % %%%%%%%%%%%%%%% End of data preparation step %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-[flu_data_val, valmetrics_inrange, vprocv] = use_platero_model(flu_data_val, model_parameters);
+[flu_data_val, valmetrics_inrange, vprocvPR1] = use_platero_model(flu_data_val, modelPR1);
 
 % Comparison between calibration-set and validation-set metrics
 load(strcat(dirdatasave,'cal_results.mat'))
