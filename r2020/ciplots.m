@@ -82,6 +82,6 @@ for uc = 1:length(uconc)
     xlabel('Observations');ylabel('Conc.(\muM)');
 end
 lg  = legend('Orientation','Horizontal','NumColumns',2); 
-lg.Layout.Tile = 'South'; 
+%lg.Layout.Tile = 'South'; 
 lg.Interpreter = "latex";
 end

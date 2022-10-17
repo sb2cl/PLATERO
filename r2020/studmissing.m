@@ -82,7 +82,7 @@ ylim([0,ymax])
 grid on, ylabel('Counts'),xlabel('Concentration'),
 xticklabels(string(nmissing(:,1))),xtickangle(45)
 
-leg.Layout.Tile = "South";
+%leg.Layout.Tile = "South";
 
 
 end
